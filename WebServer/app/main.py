@@ -1,12 +1,20 @@
-from flask import Flask
+from flask import Flask, request, jsonify, abort
 
 app = Flask(__name__)
 
+@app.route('/api', methods=['GET'])
+def api():
+    age = request.args.get('age')
+    name = request.args.get('name')
+    if age == "19" and name == "zs":
+        return jsonify({"code": 200, "msg": "success"})
+    else:
+        abort(401, "Unauthorized")
 
-@app.route('/hello')
-def hello():
-    return 'hello world'
 
+@app.errorhandler(401)
+def unauthorized(error):
+    return jsonify({"code": 401, "msg": "fail"}), 401
 
 if __name__ == '__main__':
-    app.run("0.0.0.0", debug=True, port=6006)
+    app.run(host='0.0.0.0', port=6006)
