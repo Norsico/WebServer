@@ -7,7 +7,8 @@ def connect_to_db(database):
         host='39.101.72.99',
         user='root',
         password='20050215Xia@',
-        database=database
+        database=database,
+        cursorclass=pymysql.cursors.DictCursor
     )
     return mydb
 
@@ -24,11 +25,11 @@ def create_table(mydb):
     mycursor.execute("CREATE TABLE customers (name VARCHAR(255), address VARCHAR(255))")
 
 
-# 插入数据
-def insert_data(mydb, name, address):
+# 插入数据(用户)
+def insert_data(mydb, UserName, openid, session_key, avatar):
     mycursor = mydb.cursor()
-    sql = "INSERT INTO customers (name, address) VALUES (%s, %s)"
-    val = (name, address)
+    sql = "INSERT INTO MainData (UserName, openid, session_key, avatar) VALUES (%s, %s, %s, %s)"
+    val = (UserName, openid, session_key, avatar)
     mycursor.execute(sql, val)
     mydb.commit()
 
