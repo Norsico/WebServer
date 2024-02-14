@@ -39,8 +39,9 @@ def wxlogin():
                 return jsonify({"code": 200, "msg": "success", "UserName": UserName, "avatar": avatar}), 200
         insert_data(mydb, "普通用户", openid, session_key, "https://imgur.la/images/2024/02/14/-4.jpg")
         mydb.close()
-
-    return jsonify({"code": 401, "msg": "fail"}), 401
+        return jsonify({"code": 200, "msg": "创建用户成功"})
+    else:
+        return jsonify({"code": 401, "msg": "fail"}), 401
 
 
 @app.route('/upload', methods=['POST'])

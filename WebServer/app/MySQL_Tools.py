@@ -54,7 +54,7 @@ def update_data(mydb, name, new_address):
 # 删除数据
 def delete_data(mydb, address):
     mycursor = mydb.cursor()
-    sql = "DELETE FROM customers WHERE address = %s"
+    sql = "DELETE FROM MainData WHERE UserName = %s"
     val = (address,)
     mycursor.execute(sql, val)
     mydb.commit()
