@@ -28,4 +28,4 @@ def wxlogin():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=6006)
+    app.run(host='39.101.72.99', port=6006)
