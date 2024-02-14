@@ -6,6 +6,8 @@ from MySQL_Tools import *
 app = Flask(__name__)
 
 
+# git fetch --all
+# git reset --hard origin/main
 @app.route('/api/wxlogin', methods=['GET'])
 def wxlogin():
     req = request.args.get('req')
@@ -39,7 +41,8 @@ def wxlogin():
                 return jsonify({"code": 200, "msg": "success", "UserName": UserName, "avatar": avatar}), 200
         insert_data(mydb, "普通用户", openid, session_key, "https://imgur.la/images/2024/02/14/-4.jpg")
         mydb.close()
-        return jsonify({"code": 200, "msg": "创建用户成功"})
+        return jsonify({"code": 200, "msg": "创建用户成功", "UserName": "普通用户",
+                        "avatar": "https://imgur.la/images/2024/02/14/-4.jpg"})
     else:
         return jsonify({"code": 401, "msg": "fail"}), 401
 
