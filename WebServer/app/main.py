@@ -44,7 +44,7 @@ def wxlogin():
                 return jsonify({"code": 200, "msg": "success", "UserName": UserName, "avatar": avatar}), 200
         insert_data(mydb, "普通用户", openid, session_key, "https://imgur.la/images/2024/02/14/-4.jpg")
         mydb.close()
-        return jsonify({"code": 200, "msg": "创建用户成功", "UserName": "普通用户",
+        return jsonify({"code": 200, "msg": "success", "UserName": "普通用户",
                         "avatar": "https://imgur.la/images/2024/02/14/-4.jpg"})
     else:
         return jsonify({"code": 401, "msg": "fail"}), 401
@@ -79,6 +79,17 @@ def upload_file():
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+
+@app.route('/changeUserdata', methods=['GET'])
+def changeUserdata():
+    changeWhat = request.args.get("changeWhat")
+    changeTo = request.args.get("changeTo")
+    openid = request.args.get("openid")
+    if changeWhat == "avatar":
+        mydb = connect_to_db('UserData')
+        update_data(mydb, "MainData", "avatar", changeTo, "openid", openid)
+        return jsonify({"message": "头像修改成功"})
 
 
 if __name__ == '__main__':

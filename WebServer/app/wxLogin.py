@@ -5,6 +5,8 @@ mydb = connect_to_db('UserData')
 
 # print(result)
 
-delete_data(mydb, "普通用户")
+# delete_data(mydb, "普通用户")
 
 # insert_data(mydb, "Norcoo", "123456", "123456", "http")
+
+update_data(mydb, "MainData", "avatar", "123", "UserName", "Norcoo")

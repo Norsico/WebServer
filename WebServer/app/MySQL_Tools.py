@@ -43,12 +43,24 @@ def select_data(mydb, name):
 
 
 # 更新数据
-def update_data(mydb, name, new_address):
-    mycursor = mydb.cursor()
-    sql = "UPDATE customers SET address = %s WHERE name = %s"
-    val = (new_address, name)
-    mycursor.execute(sql, val)
-    mydb.commit()
+
+
+def update_data(conn, table, column_to_update, new_value, condition_column, condition_value):
+    # 创建游标
+    cursor = conn.cursor()
+
+    # 更新数据
+    sql = f"UPDATE {table} SET {column_to_update} = %s WHERE {condition_column} = %s"
+    values = (new_value, condition_value)
+
+    cursor.execute(sql, values)
+
+    # 提交更改
+    conn.commit()
+
+    # 关闭游标和连接
+    cursor.close()
+    conn.close()
 
 
 # 删除数据
