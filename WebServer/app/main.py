@@ -90,6 +90,12 @@ def changeUserdata():
         mydb = connect_to_db('UserData')
         update_data(mydb, "MainData", changeWhat, changeTo, "openid", openid)
         return jsonify({"message": "修改成功"})
+    elif  changeWhat == "UserName":
+        mydb = connect_to_db('UserData')
+        update_data(mydb, "MainData", changeWhat, changeTo, "openid", openid)
+        return jsonify({"message": "修改成功"})
+    else:
+        return jsonify({"message": "修改失败"})
 
 
 @app.route('/getUserdata', methods=['GET'])
