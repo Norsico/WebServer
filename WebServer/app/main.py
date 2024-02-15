@@ -88,8 +88,8 @@ def changeUserdata():
     openid = request.args.get("openid")
     if changeWhat == "avatar":
         mydb = connect_to_db('UserData')
-        update_data(mydb, "MainData", "avatar", changeTo, "openid", openid)
-        return jsonify({"message": "头像修改成功"})
+        update_data(mydb, "MainData", changeWhat, changeTo, "openid", openid)
+        return jsonify({"message": "修改成功"})
 
 
 @app.route('/getUserdata', methods=['GET'])
