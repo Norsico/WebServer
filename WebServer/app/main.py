@@ -92,5 +92,16 @@ def changeUserdata():
         return jsonify({"message": "头像修改成功"})
 
 
+@app.route('/getUserdata', methods=['GET'])
+def getuserdata():
+    openid = request.args.get("openid")
+    mydb = connect_to_db('UserData')
+    data = select_data(mydb, 'MainData')
+    for user in data:
+        if user['openid'] == openid:
+            return jsonify({"message": "获取成功", "data": user})
+    return jsonify({"message": "获取失败"})
+
+
 if __name__ == '__main__':
     app.run(host='172.17.156.158', port=6006)
