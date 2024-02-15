@@ -90,7 +90,7 @@ def changeUserdata():
         mydb = connect_to_db('UserData')
         update_data(mydb, "MainData", changeWhat, changeTo, "openid", openid)
         return jsonify({"message": "修改成功"})
-    elif  changeWhat == "UserName":
+    elif changeWhat == "UserName" and changeTo != "":
         mydb = connect_to_db('UserData')
         update_data(mydb, "MainData", changeWhat, changeTo, "openid", openid)
         return jsonify({"message": "修改成功"})
