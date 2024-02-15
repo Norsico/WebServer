@@ -1,7 +1,6 @@
 from MySQL_Tools import *
 
 mydb = connect_to_db('UserData')
-
 # result = select_data(mydb, 'MainData')
 
 # print(result)

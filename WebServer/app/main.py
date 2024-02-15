@@ -1,5 +1,7 @@
+import os
+
 import requests
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory, url_for
 
 from MySQL_Tools import *
 
@@ -8,6 +10,7 @@ app = Flask(__name__)
 
 # git fetch --all
 # git reset --hard origin/main
+
 @app.route('/api/wxlogin', methods=['GET'])
 def wxlogin():
     req = request.args.get('req')
@@ -47,29 +50,36 @@ def wxlogin():
         return jsonify({"code": 401, "msg": "fail"}), 401
 
 
+# 存储路径
+UPLOAD_FOLDER = '/userdata/upload'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
+# 文件上传接口
 @app.route('/upload', methods=['POST'])
 def upload_file():
     if 'file' not in request.files:
-        return 'No file part'
+        return jsonify({'error': 'No file part'})
 
     file = request.files['file']
-
     if file.filename == '':
-        return 'No selected file'
+        return jsonify({'error': 'No selected file'})
 
-    if file:
-        file.save('<path_to_save_directory>/<filename>')
-        return 'File uploaded successfully'
-    else:
-        return 'File upload failed'
+    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)  # 创建文件夹
+    file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
+
+    # 构建图片的URL以及返回
+    image_url = url_for('uploaded_file', filename=file.filename, _external=True)
+
+    response = {'message': 'File uploaded successfully', 'image_url': image_url}
+    return jsonify(response)
 
 
-UPLOAD_FOLDER = '<path_to_save_directory>'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# 获取图片接口
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
-# @app.route('/get_image/<filename>', methods=['GET'])
-# def get_image(filename):
-#     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=6006)
+    app.run(host='172.17.156.158', port=6006)
