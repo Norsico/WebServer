@@ -1,3 +1,4 @@
+import json
 import os
 
 import requests
@@ -107,6 +108,26 @@ def getuserdata():
         if user['openid'] == openid:
             return jsonify({"message": "获取成功", "data": user})
     return jsonify({"message": "获取失败"})
+
+
+@app.route('/fixPlan', methods=['GET'])
+def fixPlan():
+    openid = request.args.get("openid")
+    plan = request.args.get("plan")
+    way = request.args.get("way")
+    result = request.args.get("result")
+    mydb = connect_to_db('UserData')
+    cursor = mydb.cursor()
+    cursor.execute(f"SELECT * FROM MainData WHERE openid = '{openid}'")
+    data = cursor.fetchone()
+    plans = json.loads(data['plans'])
+    plans[plan][way] = result
+    # 更新数据
+    cursor.execute(f"UPDATE MainData SET plans = %s WHERE openid = '{openid}'", (json.dumps(plans),))
+    mydb.commit()
+    # 关闭游标和数据库连接
+    cursor.close()
+    mydb.close()
 
 
 if __name__ == '__main__':
