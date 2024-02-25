@@ -115,7 +115,7 @@ def fixPlan():
     openid = request.args.get("openid")
     plan = request.args.get("plan")
     way = request.args.get("way")
-    result = request.args.get("result")
+    result = json.loads(request.args.get("result"))
     mydb = connect_to_db('UserData')
     cursor = mydb.cursor()
     cursor.execute(f"SELECT * FROM MainData WHERE openid = '{openid}'")
