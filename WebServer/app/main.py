@@ -87,94 +87,101 @@ def changeUserdata():
     changeWhat = request.args.get("changeWhat")
     changeTo = request.args.get("changeTo")
     openid = request.args.get("openid")
-    if changeWhat == "avatar":
-        mydb = connect_to_db('UserData')
-        update_data(mydb, "MainData", changeWhat, changeTo, "openid", openid)
-        return jsonify({"message": "修改成功"})
-    elif changeWhat == "UserName" and changeTo != "":
-        mydb = connect_to_db('UserData')
-        update_data(mydb, "MainData", changeWhat, changeTo, "openid", openid)
-        return jsonify({"message": "修改成功"})
-    else:
-        return jsonify({"message": "修改失败"})
+    if openid != "":
+        if changeWhat == "avatar":
+            mydb = connect_to_db('UserData')
+            update_data(mydb, "MainData", changeWhat, changeTo, "openid", openid)
+            return jsonify({"message": "修改成功"})
+        elif changeWhat == "UserName" and changeTo != "":
+            mydb = connect_to_db('UserData')
+            update_data(mydb, "MainData", changeWhat, changeTo, "openid", openid)
+            return jsonify({"message": "修改成功"})
+        else:
+            return jsonify({"message": "修改失败"})
 
 
 @app.route('/changeUserdata/delPlan', methods=['GET'])
 def delPlan():
     openid = request.args.get("openid")
-    name = request.args.get("name")
-    mydb = connect_to_db('UserData')
-    cursor = mydb.cursor()
-    cursor.execute(f"SELECT plans FROM MainData WHERE openid= '{openid}' ")
-    plans = json.loads(cursor.fetchall()[0]['plans'])
-    plans.pop(name)
-    sql = f"UPDATE MainData SET plans = %s WHERE openid= '{openid}'"
-    cursor.execute(sql, (json.dumps(plans),))
-    mydb.commit()
-    cursor.close()
-    mydb.close()
-
-
-@app.route('/changeUserdata/addPlan', methods=['GET'])
-def addPlan():
-    openid = request.args.get("openid")
-    name = request.args.get("name")
-    note = request.args.get("note")
-    way = request.args.get("way")
-    time = request.args.get("time")
-    mydb = connect_to_db('UserData')
-    cursor = mydb.cursor()
-    cursor.execute(f"SELECT plans FROM MainData WHERE openid= '{openid}' ")
-    plans = json.loads(cursor.fetchall()[0]['plans'])
-    data = {
-        'way': eval(way),
-        'name': name,
-        'note': note,
-        'time': time,
-    }
-    if name in plans:
-        cursor.close()
-        mydb.close()
-        return jsonify({"message": "计划名重复"})
-    else:
-        plans[name] = data
+    if openid !=  "":
+        name = request.args.get("name")
+        mydb = connect_to_db('UserData')
+        cursor = mydb.cursor()
+        cursor.execute(f"SELECT plans FROM MainData WHERE openid= '{openid}' ")
+        plans = json.loads(cursor.fetchall()[0]['plans'])
+        plans.pop(name)
         sql = f"UPDATE MainData SET plans = %s WHERE openid= '{openid}'"
         cursor.execute(sql, (json.dumps(plans),))
         mydb.commit()
         cursor.close()
         mydb.close()
-        return jsonify({"message": "添加成功"})
+        return jsonify({"message": "删除成功"})
+
+
+
+@app.route('/changeUserdata/addPlan', methods=['GET'])
+def addPlan():
+    openid = request.args.get("openid")
+    if openid != "":
+        name = request.args.get("name")
+        note = request.args.get("note")
+        way = request.args.get("way")
+        time = request.args.get("time")
+        mydb = connect_to_db('UserData')
+        cursor = mydb.cursor()
+        cursor.execute(f"SELECT plans FROM MainData WHERE openid= '{openid}' ")
+        plans = json.loads(cursor.fetchall()[0]['plans'])
+        data = {
+            'way': eval(way),
+            'name': name,
+            'note': note,
+            'time': time,
+        }
+        if name in plans:
+            cursor.close()
+            mydb.close()
+            return jsonify({"message": "计划名重复"})
+        else:
+            plans[name] = data
+            sql = f"UPDATE MainData SET plans = %s WHERE openid= '{openid}'"
+            cursor.execute(sql, (json.dumps(plans),))
+            mydb.commit()
+            cursor.close()
+            mydb.close()
+            return jsonify({"message": "添加成功"})
 
 
 @app.route('/getUserdata', methods=['GET'])
 def getuserdata():
     openid = request.args.get("openid")
-    mydb = connect_to_db('UserData')
-    data = select_data(mydb, 'MainData')
-    for user in data:
-        if user['openid'] == openid:
-            return jsonify({"message": "获取成功", "data": user})
-    return jsonify({"message": "获取失败"})
+    if openid != "":
+        mydb = connect_to_db('UserData')
+        data = select_data(mydb, 'MainData')
+        for user in data:
+            if user['openid'] == openid:
+                return jsonify({"message": "获取成功", "data": user})
+        return jsonify({"message": "获取失败"})
 
 
 @app.route('/fixPlan', methods=['GET'])
 def fixPlan():
     openid = request.args.get("openid")
-    plan = request.args.get("plan")
-    way = request.args.get("way")
-    result = json.loads(request.args.get("result"))
-    mydb = connect_to_db('UserData')
-    cursor = mydb.cursor()
-    cursor.execute(f"SELECT * FROM MainData WHERE openid = '{openid}'")
-    data = cursor.fetchone()
-    plans = json.loads(data['plans'])
-    plans[plan][way] = result
-    # 更新数据
-    cursor.execute(f"UPDATE MainData SET plans = %s WHERE openid = '{openid}'", (json.dumps(plans),))
-    mydb.commit()
-    # 关闭游标和数据库连接
-    cursor.close()
-    mydb.close()
+    if openid != "":
+        plan = request.args.get("plan")
+        way = request.args.get("way")
+        result = json.loads(request.args.get("result"))
+        mydb = connect_to_db('UserData')
+        cursor = mydb.cursor()
+        cursor.execute(f"SELECT * FROM MainData WHERE openid = '{openid}'")
+        data = cursor.fetchone()
+        plans = json.loads(data['plans'])
+        plans[plan][way] = result
+        # 更新数据
+        cursor.execute(f"UPDATE MainData SET plans = %s WHERE openid = '{openid}'", (json.dumps(plans),))
+        mydb.commit()
+        # 关闭游标和数据库连接
+        cursor.close()
+        mydb.close()
 
 
 if __name__ == '__main__':
