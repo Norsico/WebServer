@@ -99,6 +99,22 @@ def changeUserdata():
         return jsonify({"message": "修改失败"})
 
 
+@app.route('/changeUserdata/delPlan', methods=['GET'])
+def delPlan():
+    openid = request.args.get("openid")
+    name = request.args.get("name")
+    mydb = connect_to_db('UserData')
+    cursor = mydb.cursor()
+    cursor.execute(f"SELECT plans FROM MainData WHERE openid= '{openid}' ")
+    plans = json.loads(cursor.fetchall()[0]['plans'])
+    plans.pop(name)
+    sql = f"UPDATE MainData SET plans = %s WHERE openid= '{openid}'"
+    cursor.execute(sql, (json.dumps(plans),))
+    mydb.commit()
+    cursor.close()
+    mydb.close()
+
+
 @app.route('/changeUserdata/addPlan', methods=['GET'])
 def addPlan():
     openid = request.args.get("openid")
