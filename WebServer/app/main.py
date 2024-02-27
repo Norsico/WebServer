@@ -99,6 +99,37 @@ def changeUserdata():
         return jsonify({"message": "修改失败"})
 
 
+@app.route('/changeUserdata/addPlan', methods=['GET'])
+def addPlan():
+    openid = request.args.get("openid")
+    name = request.args.get("name")
+    note = request.args.get("note")
+    way = request.args.get("way")
+    time = request.args.get("time")
+    mydb = connect_to_db('UserData')
+    cursor = mydb.cursor()
+    cursor.execute(f"SELECT plans FROM MainData WHERE openid= '{openid}' ")
+    plans = json.loads(cursor.fetchall()[0]['plans'])
+    data = {
+        'way': eval(way),
+        'name': name,
+        'note': note,
+        'time': time,
+    }
+    if name in plans:
+        cursor.close()
+        mydb.close()
+        return jsonify({"message": "计划名重复"})
+    else:
+        plans[name] = data
+        sql = f"UPDATE MainData SET plans = %s WHERE openid= '{openid}'"
+        cursor.execute(sql, (json.dumps(plans),))
+        mydb.commit()
+        cursor.close()
+        mydb.close()
+        return jsonify({"message": "添加成功"})
+
+
 @app.route('/getUserdata', methods=['GET'])
 def getuserdata():
     openid = request.args.get("openid")
