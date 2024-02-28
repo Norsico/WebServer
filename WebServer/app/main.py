@@ -153,6 +153,7 @@ def addPlan():
             'name': name,
             'note': note,
             'time': time,
+            'outline': {}
         }
         if name in plans:
             cursor.close()
