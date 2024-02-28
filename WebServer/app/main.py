@@ -1,9 +1,8 @@
-import json
 import os
 
-import requests
 from flask import Flask, request, jsonify, send_from_directory, url_for
 
+from AIchat import *
 from MySQL_Tools import *
 
 # 运用的是flask框架
@@ -142,18 +141,19 @@ def addPlan():
     if openid != "":
         name = request.args.get("name")
         note = request.args.get("note")
-        way = request.args.get("way")
+        way = eval(request.args.get("way"))  # 使用这个eval的原因是：服务器传过来的是一个str，但这里要转换成list
         time = request.args.get("time")
         mydb = connect_to_db('UserData')
         cursor = mydb.cursor()
         cursor.execute(f"SELECT plans FROM MainData WHERE openid= '{openid}' ")
         plans = json.loads(cursor.fetchall()[0]['plans'])
+        outline = generate_outline(note, way[0], way[1], way[2], way[3])
         data = {
-            'way': eval(way),  # 使用这个eval的原因是：服务器传过来的是一个str，但这里要转换成list
+            'way': way,
             'name': name,
             'note': note,
             'time': time,
-            'outline': {}
+            'outline': outline
         }
         if name in plans:
             cursor.close()
