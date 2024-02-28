@@ -57,14 +57,14 @@ def sent_add_platform_message(mes: str) -> dict:
 # print(get_platform_response(massage))
 
 
-# plan, level, studyStyle, communicationStyle, expressionStyle
+#
 # 生成教学大纲
-def generate_outline():
-    plan = "计算机"
-    level = "大学本科"
-    studyStyle = "理论型"
-    communicationStyle = "命令型"
-    expressionStyle = "严厉型"
+def generate_outline(plan, level, studyStyle, communicationStyle, expressionStyle):
+    # plan = "计算机"
+    # level = "大学本科"
+    # studyStyle = "理论型"
+    # communicationStyle = "命令型"
+    # expressionStyle = "严厉型"
 
     mes = """
     请你充当一位智能AI导师，给我列一个教学大纲。我会给你我的学习阶段和学习风格以及我想让你以怎样的沟通风格和表达风格跟我对话，教我学习。比如现在我的学习目标是如何烘烤面包，学习阶段是大学，学习风格是行动型，我希望与你的沟通风格是通俗易懂的，表达风格是鼓励的。你只需要给我返回python中字典的格式，不需要其它字描述。你应该返回类似下面的结果:
