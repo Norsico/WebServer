@@ -182,6 +182,18 @@ def getuserdata():
         return jsonify({"message": "获取失败"})
 
 
+@app.route('/getUserdata/getOutline', methods=['GET'])
+def getOutline():
+    openid = request.args.get("openid")
+    planName = request.args.get("planName")
+    if openid != "":
+        mydb = connect_to_db('UserData')
+        cursor = mydb.cursor()
+        cursor.execute(f"SELECT plans FROM MainData WHERE openid= '{openid}' ")
+        plans = json.loads(cursor.fetchall()[0]['plans'])
+        return jsonify({"message": "获取成功", "data": plans[planName]['outline']})
+
+
 # 这个是用户修改plan的接口，用于修改plan中的‘方式’，即教学方式
 @app.route('/fixPlan', methods=['GET'])
 def fixPlan():
