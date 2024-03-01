@@ -147,19 +147,19 @@ def addPlan():
         cursor = mydb.cursor()
         cursor.execute(f"SELECT plans FROM MainData WHERE openid= '{openid}' ")
         plans = json.loads(cursor.fetchall()[0]['plans'])
-        outline = generate_outline(note, way[0], way[1], way[2], way[3])
-        data = {
-            'way': way,
-            'name': name,
-            'note': note,
-            'time': time,
-            'outline': outline
-        }
         if name in plans:
             cursor.close()
             mydb.close()
             return jsonify({"message": "计划名重复"})  # 这里是为了没有计划名称重复的，要不然数据库可能会有些bug出现
         else:
+            outline = generate_outline(note, way[0], way[1], way[2], way[3])
+            data = {
+                'way': way,
+                'name': name,
+                'note': note,
+                'time': time,
+                'outline': outline
+            }
             plans[name] = data
             sql = f"UPDATE MainData SET plans = %s WHERE openid= '{openid}'"
             cursor.execute(sql, (json.dumps(plans),))
