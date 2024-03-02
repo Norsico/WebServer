@@ -199,6 +199,22 @@ def addstudyplan():
         return jsonify({"message": "openid不能为空"})
 
 
+@app.route('/changeUserdata/returnCourses', methods=['GET'])
+def returnCourses():
+    openid = request.args.get("openid")
+    planName = request.args.get("planName")
+    if openid != "":
+        mydb = connect_to_db('UserData')
+        cursor = mydb.cursor()
+        cursor.execute(f"SELECT plans FROM MainData WHERE openid= '{openid}' ")
+        plan = json.loads(cursor.fetchall()[0]['plans'])[planName]['studyplan']
+        cursor.close()
+        mydb.close()
+        return jsonify({"message": "返回成功", "data": plan})
+    else:
+        return jsonify({"message": "openid不能为空"})
+
+
 # 这个是用来获取用户数据的接口，里面可以拿到用户绝大部分的数据
 @app.route('/getUserdata', methods=['GET'])
 def getuserdata():
