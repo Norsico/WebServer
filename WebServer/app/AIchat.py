@@ -79,7 +79,7 @@ def generate_knowledgePoint(planName, courseName, style):
     },  
     "specificExamples": [  
       {  
-        "第1节": "第1节. 文件操作命令",  
+        "name": "第1节. 文件操作命令",  
         "example": [  
           "ls -l：以长格式列出当前目录下的文件和目录",  
           "cd /home/user：切换到/home/user目录",  
@@ -90,7 +90,7 @@ def generate_knowledgePoint(planName, courseName, style):
         ]  
       },  
       {  
-        "第2节": "第2节. 进程管理命令",  
+        "name": "第2节. 进程管理命令",  
         "example": [  
           "ps aux：查看当前系统上的所有进程",  
           "top：实时显示系统中各个进程的状态",  
@@ -98,7 +98,7 @@ def generate_knowledgePoint(planName, courseName, style):
         ]  
       },  
       {  
-        "第3节": "第3节. 网络相关命令",  
+        "name": "第3节. 网络相关命令",  
         "example": [  
           "ifconfig：查看和配置网络接口",  
           "ping www.google.com：测试与www.google.com的网络连通性",  
