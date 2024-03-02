@@ -203,11 +203,12 @@ def addstudyplan():
 def returnCourses():
     openid = request.args.get("openid")
     planName = request.args.get("planName")
+    sourceName = request.args.get("sourceName")
     if openid != "":
         mydb = connect_to_db('UserData')
         cursor = mydb.cursor()
         cursor.execute(f"SELECT plans FROM MainData WHERE openid= '{openid}' ")
-        plan = json.loads(cursor.fetchall()[0]['plans'])[planName]['studyplan']
+        plan = json.loads(cursor.fetchall()[0]['plans'])[planName]['studyplan'][sourceName]
         cursor.close()
         mydb.close()
         return jsonify({"message": "返回成功", "data": plan})
