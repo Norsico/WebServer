@@ -77,7 +77,7 @@ def generate_knowledgePoint(planName, courseName, style):
       "命令语法": "每个命令都有其特定的语法结构，包括命令名、选项和参数。",  
       "命令选项": "命令选项用于修改命令的默认行为，以满足特定的需求。"  
     },  
-    "specificExamples": [  
+    "details": [  
       {  
         "name": "第1节. 文件操作命令",  
         "example": [  
@@ -112,7 +112,7 @@ def generate_knowledgePoint(planName, courseName, style):
     "通俗易懂的学习资料：如Linux命令速查手册，用简洁明了的语言解释命令用法",  
     "幽默风格的教学视频：如B站上有轻松幽默讲解Linux命令的视频"  
   ]  
-} """ + f"""现在假如我的计划是"{planName}"，我要学习里面的"{courseName}"，学习方式是{style}"""
+} 并且这个json的键不能改变！""" + f"""现在假如我的计划是"{planName}"，我要学习里面的"{courseName}"，学习方式是{style}"""
     massage = \
         {
             "messages": [
