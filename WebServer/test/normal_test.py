@@ -14,7 +14,7 @@ conn = pymysql.connect(
 cursor = conn.cursor()
 cursor.execute("SELECT plans FROM MainData WHERE openid= 'o1dH-7JqEeuHAFtto6Qe2jczVT58' ")
 plans = json.loads(cursor.fetchall()[0]['plans'])
-print(plans['computer']['outline'])
+print(plans['plan1']['studyplan'])
 
 # print(plans['面包']['outline'])
 # if not  plans['面包']['outline']:

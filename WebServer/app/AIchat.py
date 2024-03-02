@@ -57,6 +57,82 @@ def sent_add_platform_message(mes: str) -> dict:
 # print(get_platform_response(massage))
 
 
+def generate_knowledgePoint(planName, courseName, style):
+    # planName = "学java"
+    # courseName = "课时7.JDBC数据库编程实践"
+    # style = "采用正式的教学风格，注重理论与实践相结合，鼓励学员通过直觉理解编程概念，培养编程思维。通过清晰的逻辑和严谨的表达，帮助学员更好地掌握Java编程知识。"
+    mes = """
+请你充当一个AI老师，比如我给你一个:假如我有一个计划"学习linux"，我要学习里面的"课时2.常用命令"，学习方式是"采用通俗易懂、幽默风趣的语言，结合丰富的实例和实战演练，让学员在轻松愉快的氛围中快速掌握Linux操作系统的核心知识和技能。"，你的回答只用返回一个json:{  
+  "title": "课时2.常用命令",  
+  "description": "深入探索Linux的常用命令，涵盖文件操作、进程管理、网络配置等核心功能。",  
+  "learningObjectives": [  
+    "掌握Linux系统中常用的基本命令及其功能",  
+    "能够独立使用命令进行文件和目录管理",  
+    "理解进程管理命令，并能够进行简单的进程控制",  
+    "熟悉系统信息和网络相关命令，解决实际问题"  
+  ],  
+  "content": {  
+    "conceptExplanation": {  
+      "常用命令": "Linux系统中的基本命令，用于执行各种任务，如文件操作、进程管理、网络配置等。",  
+      "命令语法": "每个命令都有其特定的语法结构，包括命令名、选项和参数。",  
+      "命令选项": "命令选项用于修改命令的默认行为，以满足特定的需求。"  
+    },  
+    "specificExamples": [  
+      {  
+        "第1节": "第1节. 文件操作命令",  
+        "example": [  
+          "ls -l：以长格式列出当前目录下的文件和目录",  
+          "cd /home/user：切换到/home/user目录",  
+          "pwd：显示当前工作目录的路径",  
+          "cp file1 file2：复制file1到file2",  
+          "mv file1 dir/：将file1移动到dir/目录下",  
+          "rm -r dir：递归删除dir目录及其内容" 
+        ]  
+      },  
+      {  
+        "第2节": "第2节. 进程管理命令",  
+        "example": [  
+          "ps aux：查看当前系统上的所有进程",  
+          "top：实时显示系统中各个进程的状态",  
+          "kill -9 PID：强制终止PID指定的进程"  
+        ]  
+      },  
+      {  
+        "第3节": "第3节. 网络相关命令",  
+        "example": [  
+          "ifconfig：查看和配置网络接口",  
+          "ping www.google.com：测试与www.google.com的网络连通性",  
+          "netstat：查看网络连接、路由表、接口统计等信息"  
+        ]  
+      }  
+    ]  
+  },  
+  "additionalResources": [  
+    "实战模拟资源：如在线实验平台，允许学生亲手操作Linux命令，加深理解",  
+    "通俗易懂的学习资料：如Linux命令速查手册，用简洁明了的语言解释命令用法",  
+    "幽默风格的教学视频：如B站上有轻松幽默讲解Linux命令的视频"  
+  ]  
+} """ + f"""现在假如我的计划是"{planName}"，我要学习里面的"{courseName}"，学习方式是{style}"""
+    massage = \
+        {
+            "messages": [
+                {"role": "user", "content": mes},
+            ],
+            "disable_search": False,
+            # "system": "" 可选参数，输入扮演的角色
+            "enable_citation": False
+        }
+    res = get_platform_response(massage)
+    res = res.replace('json', '')
+    res = res.replace('```', '')
+    # print(res)
+    # print(json.loads(res))
+    return json.loads(res)
+
+
+# generate_knowledgePoint()
+
+
 # 生成教学大纲
 def generate_outline(plan, level, studyStyle, communicationStyle, expressionStyle):
     # plan = "计算机"
