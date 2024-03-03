@@ -14,6 +14,7 @@ conn = pymysql.connect(
 cursor = conn.cursor()
 cursor.execute("SELECT plans FROM MainData WHERE openid= 'o1dH-7JqEeuHAFtto6Qe2jczVT58' ")
 plans = json.loads(cursor.fetchall()[0]['plans'])
+print(plans)
 print(plans['JavaScript学习计划']['test'])
 
 

@@ -70,7 +70,7 @@ def sent_add_platform_message(mes: str) -> dict:
 
 def generate_exams(planName, courseName):
     mes = """
-    请你当一个出题人，出一些选择题，并给出答案和简短的解释，返回给我的是一个json，比如出2道关于的是"学习JavaScript"任务中的"课时2. 条件语句、循环语句与函数"。成绩一直是0就可以了。你的结果应该是:{
+    请你当一个出题人，出一些单项选择题，并给出答案和简短的解释，返回给我的是一个json，比如出2道关于的是"学习JavaScript"任务中的"课时2. 条件语句、循环语句与函数"的单项选择题。成绩一直是0就可以了。你的结果应该是:{
 "questions":[
  {  
         "题目": "在JavaScript中，以下哪个关键字用于声明一个函数？",  
@@ -81,7 +81,8 @@ def generate_exams(planName, courseName):
             "D. const"  
         ],  
         "答案": "B",  
-        "解释": "在JavaScript中，'function' 关键字用于声明一个函数。"  
+        "解释": "在JavaScript中，'function' 关键字用于声明一个函数。" ,
+        "我的选项":"" 
     },  
     {  
         "题目": "以下哪个语句会创建一个无限循环？",  
@@ -92,10 +93,11 @@ def generate_exams(planName, courseName):
             "D. for (let i = 0; i > 0; i--) {}"  
         ],  
         "答案": "B",  
-        "解释": "'while (true) {}' 会一直执行，因为没有条件可以使循环终止，所以它是一个无限循环。"  
+        "解释": "'while (true) {}' 会一直执行，因为没有条件可以使循环终止，所以它是一个无限循环。",
+        "我的选项":""  
     },  
 ],"allAnswer":["B","B"],"成绩":  0
-}现在请你3道在任务""" + f"{planName}中的{courseName}"
+}现在请你出3道单项选择题，是任务""" + f"{planName}中的{courseName}"
     massage = \
         {
             "messages": [
@@ -108,6 +110,7 @@ def generate_exams(planName, courseName):
     res = get_platform_response(massage)
     res = res.replace('json', '')
     res = res.replace('```', '')
+    # print(res)
     return json.loads(res)
 
 # generate_exams("学习JavaScript", "课时2. 条件语句、循环语句与函数")
