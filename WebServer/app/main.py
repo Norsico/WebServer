@@ -281,7 +281,10 @@ def chat():
             else:
                 res = generate_details(courseName, details)
                 plans[planName]['chat'][courseName][details] = res
+                cursor.execute(f"UPDATE MainData SET plans = %s WHERE openid = '{openid}'", (json.dumps(plans),))
+                mydb.commit()
                 return jsonify({"message": "获取成功", "data": res})
+                
         else:
             res = generate_details(courseName, details)
             plans[planName]['chat'][courseName] = {}
