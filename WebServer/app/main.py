@@ -278,8 +278,6 @@ def chat():
         if courseName in plans[planName]['chat']:
             if details in plans[planName]['chat'][courseName]:
                 return jsonify({"message": "获取成功", "data": plans[planName]['chat'][courseName][details]})
-            else:
-                return jsonify({"message": "获取失败"})
         else:
             res = generate_details(courseName, details)
             plans[planName]['chat'][courseName] = {}
