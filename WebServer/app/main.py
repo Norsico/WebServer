@@ -159,7 +159,8 @@ def addPlan():
                 'note': note,
                 'time': time,
                 'outline': outline,
-                'studyplan': {}
+                'studyplan': {},
+                'chat': {}
             }
             plans[name] = data
             sql = f"UPDATE MainData SET plans = %s WHERE openid= '{openid}'"
@@ -267,10 +268,25 @@ def fixPlan():
 def chat():
     openid = request.args.get("openid")
     if openid != "":
+        planName = request.args.get("planName")
         courseName = request.args.get("courseName")
         details = request.args.get("details")
-        res = generate_details(courseName, details)
-        return jsonify({"message": "获取成功", "data": res})
+        mydb = connect_to_db('UserData')
+        cursor = mydb.cursor()
+        cursor.execute(f"SELECT plans FROM MainData WHERE openid= '{openid}' ")
+        plans = json.loads(cursor.fetchall()[0]['plans'])
+        if courseName in plans[planName]['chat']:
+            if details in plans[planName]['chat'][courseName]:
+                return jsonify({"message": "获取成功", "data": plans[planName]['chat'][courseName][details]})
+            else:
+                return jsonify({"message": "获取失败"})
+        else:
+            res = generate_details(courseName, details)
+            plans[planName]['chat'][courseName] = {}
+            plans[planName]['chat'][courseName][details] = res
+            cursor.execute(f"UPDATE MainData SET plans = %s WHERE openid = '{openid}'", (json.dumps(plans),))
+            mydb.commit()
+            return jsonify({"message": "获取成功", "data": res})
     else:
         return jsonify({"message": "获取失败"})
 
