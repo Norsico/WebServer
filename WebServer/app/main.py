@@ -270,7 +270,9 @@ def chat():
         courseName = request.args.get("courseName")
         details = request.args.get("details")
         res = generate_details(courseName, details)
-        return jsonify({res})
+        return jsonify({"message": "获取成功", "data": res})
+    else:
+        return jsonify({"message": "获取失败"})
 
 
 if __name__ == '__main__':
