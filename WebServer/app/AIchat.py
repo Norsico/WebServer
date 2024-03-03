@@ -16,6 +16,17 @@ SECRET_KEY = "yZw1jvh9DhkRefj1Mx28CnQD8XC7pDqO"
 #         "enable_citation": False
 #     }
 
+def calculate_score(standard_answers, your_answers):
+    total_score = 0
+    total_items = len(standard_answers)
+    score_per_item = 100 / total_items
+
+    for sa, ya in zip(standard_answers, your_answers):
+        if sa == ya:
+            total_score += score_per_item
+
+    return total_score
+
 
 def get_platform_response(message: dict) -> str:
     url = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions?access_token=" + get_access_token()
@@ -55,6 +66,52 @@ def sent_add_platform_message(mes: str) -> dict:
 
 
 # print(get_platform_response(massage))
+
+
+def generate_exams(planName, courseName):
+    mes = """
+    请你当一个出题人，出一些选择题，并给出答案和简短的解释，返回给我的是一个json，比如出2道关于的是"学习JavaScript"任务中的"课时2. 条件语句、循环语句与函数"。成绩一直是0就可以了。你的结果应该是:{
+"questions":[
+ {  
+        "题目": "在JavaScript中，以下哪个关键字用于声明一个函数？",  
+        "选项": [  
+            "A. var",  
+            "B. function",  
+            "C. let",  
+            "D. const"  
+        ],  
+        "答案": "B",  
+        "解释": "在JavaScript中，'function' 关键字用于声明一个函数。"  
+    },  
+    {  
+        "题目": "以下哪个语句会创建一个无限循环？",  
+        "选项": [  
+            "A. for (let i = 0; i < 10; i++) {}",  
+            "B. while (true) {}",  
+            "C. do {} while (false);",  
+            "D. for (let i = 0; i > 0; i--) {}"  
+        ],  
+        "答案": "B",  
+        "解释": "'while (true) {}' 会一直执行，因为没有条件可以使循环终止，所以它是一个无限循环。"  
+    },  
+],"allAnswer":["B","B"],"成绩":  0
+}现在请你3道在任务""" + f"{planName}中的{courseName}"
+    massage = \
+        {
+            "messages": [
+                {"role": "user", "content": mes},
+            ],
+            "disable_search": False,
+            # "system": "" 可选参数，输入扮演的角色
+            "enable_citation": False
+        }
+    res = get_platform_response(massage)
+    res = res.replace('json', '')
+    res = res.replace('```', '')
+    return json.loads(res)
+
+# generate_exams("学习JavaScript", "课时2. 条件语句、循环语句与函数")
+
 
 def generate_details(courseName, details):
     # courseName = "课时1. JavaScript概述与基础语法"

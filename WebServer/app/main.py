@@ -160,7 +160,8 @@ def addPlan():
                 'time': time,
                 'outline': outline,
                 'studyplan': {},
-                'chat': {}
+                'chat': {},
+                'test': {}
             }
             plans[name] = data
             sql = f"UPDATE MainData SET plans = %s WHERE openid= '{openid}'"
@@ -169,6 +170,31 @@ def addPlan():
             cursor.close()
             mydb.close()
             return jsonify({"message": "添加成功"})
+
+
+@app.route('/changeUserdata/iftested', methods=['GET'])
+def iftested():
+    openid = request.args.get("openid")
+    if openid != "":
+        planName = request.args.get("planName")
+        courseName = request.args.get("courseName")
+        mydb = connect_to_db('UserData')
+        cursor = mydb.cursor()
+        cursor.execute(f"SELECT plans FROM MainData WHERE openid= '{openid}' ")
+        plans = json.loads(cursor.fetchall()[0]['plans'])
+        if courseName in plans[planName]['test']:
+            cursor.close()
+            mydb.close()
+            return jsonify({"message": "已测试", "exams": plans[planName]['test'][courseName]})
+        else:
+            exams = generate_exams(planName, courseName)
+            plans[planName]['test'][courseName] = exams
+            sql = f"UPDATE MainData SET plans = %s WHERE openid= '{openid}'"
+            cursor.execute(sql, (json.dumps(plans),))
+            mydb.commit()
+            cursor.close()
+            mydb.close()
+            return jsonify({"message": "未测试", "exams": exams})
 
 
 @app.route('/changeUserdata/addstudyplan', methods=['GET'])
@@ -284,7 +310,7 @@ def chat():
                 cursor.execute(f"UPDATE MainData SET plans = %s WHERE openid = '{openid}'", (json.dumps(plans),))
                 mydb.commit()
                 return jsonify({"message": "获取成功", "data": res})
-                
+
         else:
             res = generate_details(courseName, details)
             plans[planName]['chat'][courseName] = {}
