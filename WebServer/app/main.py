@@ -263,6 +263,16 @@ def fixPlan():
         mydb.close()
 
 
+@app.route('/chat', methods=['GET'])
+def chat():
+    openid = request.args.get("openid")
+    if openid != "":
+        courseName = request.args.get("courseName")
+        details = request.args.get("details")
+        res = generate_details(courseName, details)
+        return jsonify({res})
+
+
 if __name__ == '__main__':
     # 这里就是直接运行这个flask框架的应用了
     app.run(host='172.17.156.158', port=6006)

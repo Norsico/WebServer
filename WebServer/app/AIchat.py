@@ -56,6 +56,27 @@ def sent_add_platform_message(mes: str) -> dict:
 
 # print(get_platform_response(massage))
 
+def generate_details(courseName, details):
+    # courseName = "课时1. JavaScript概述与基础语法"
+    # details = "switch多分支选择语句"
+    mes = "我在学" + f"{courseName}，这里面的{details}我不太懂，简要介绍，简短一点"
+    massage = \
+        {
+            "messages": [
+                {"role": "user", "content": mes},
+            ],
+            "disable_search": False,
+            # "system": "" 可选参数，输入扮演的角色
+            "enable_citation": False
+        }
+    res = get_platform_response(massage)
+    # print(res)
+    # print(json.loads(res))
+    return res
+
+
+# generate_details()
+
 
 def generate_knowledgePoint(planName, courseName, style):
     # planName = "学java"
