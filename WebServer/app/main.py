@@ -172,6 +172,26 @@ def addPlan():
             return jsonify({"message": "添加成功"})
 
 
+@app.route('/changeUserdata/updateExams', methods=['GET'])
+def updateExams():
+    openid = request.args.get("openid")
+    if openid != "":
+        exams = request.args.get("exams")
+        planName = request.args.get("planName")
+        courseName = request.args.get("courseName")
+        mydb = connect_to_db('UserData')
+        cursor = mydb.cursor()
+        cursor.execute(f"SELECT exams FROM MainData WHERE openid= '{openid}' ")
+        plans = json.loads(cursor.fetchall()[0]['plans'])
+        plans[planName]['test'][courseName] = exams
+        sql = f"UPDATE MainData SET exams = %s WHERE openid= '{openid}'"
+        cursor.execute(sql, (json.dumps(plans),))
+        mydb.commit()
+        cursor.close()
+        mydb.close()
+        return jsonify({"exams": exams, "message": "更新成功"})
+
+
 @app.route('/changeUserdata/iftested', methods=['GET'])
 def iftested():
     openid = request.args.get("openid")
