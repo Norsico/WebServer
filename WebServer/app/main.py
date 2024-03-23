@@ -176,7 +176,7 @@ def addPlan():
 def updateExams():
     openid = request.args.get("openid")
     if openid != "":
-        exams = request.args.get("exams")
+        exams = json.loads(request.args.get("exams"))
         planName = request.args.get("planName")
         courseName = request.args.get("courseName")
         mydb = connect_to_db('UserData')
