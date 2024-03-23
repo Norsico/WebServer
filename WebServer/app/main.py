@@ -181,10 +181,10 @@ def updateExams():
         courseName = request.args.get("courseName")
         mydb = connect_to_db('UserData')
         cursor = mydb.cursor()
-        cursor.execute(f"SELECT exams FROM MainData WHERE openid= '{openid}' ")
+        cursor.execute(f"SELECT plans FROM MainData WHERE openid= '{openid}' ")
         plans = json.loads(cursor.fetchall()[0]['plans'])
         plans[planName]['test'][courseName] = exams
-        sql = f"UPDATE MainData SET exams = %s WHERE openid= '{openid}'"
+        sql = f"UPDATE MainData SET plans = %s WHERE openid= '{openid}'"
         cursor.execute(sql, (json.dumps(plans),))
         mydb.commit()
         cursor.close()
