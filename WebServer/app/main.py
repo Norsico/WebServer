@@ -347,7 +347,7 @@ def anaStu():
     openid = request.args.get('openid')
     if openid != "":
         courseName = request.args.get('courseName')
-        text = request.args.get('text')
+        text = str(json.loads(request.args.get('text')))
         # print(courseName)
         # print(text)
         # print(type(text))
