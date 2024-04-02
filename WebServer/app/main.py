@@ -348,11 +348,11 @@ def anaStu():
     if openid != "":
         courseName = request.args.get('courseName')
         text = request.args.get('text')
-        print(courseName)
-        print(text)
-        print(type(text))
-        # res = generate_ai_analysis(courseName, text)
-        return jsonify({"message": "获取成功"})
+        # print(courseName)
+        # print(text)
+        # print(type(text))
+        res = generate_ai_analysis(courseName, text)
+        return jsonify({"message": "获取成功", "data": res})
     else:
         return jsonify({"message": "获取失败"})
 
