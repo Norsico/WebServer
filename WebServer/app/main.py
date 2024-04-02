@@ -342,6 +342,21 @@ def chat():
         return jsonify({"message": "获取失败"})
 
 
+@app.route('/anaStu', methods=['GET'])
+def anaStu():
+    openid = request.args.get('openid')
+    if openid != "":
+        courseName = request.args.get('courseName')
+        text = request.args.get('text')
+        print(courseName)
+        print(text)
+        print(type(text))
+        # res = generate_ai_analysis(courseName, text)
+        return jsonify({"message": "获取成功"})
+    else:
+        return jsonify({"message": "获取失败"})
+
+
 if __name__ == '__main__':
     # 这里就是直接运行这个flask框架的应用了
     app.run(host='172.17.156.158', port=6006)

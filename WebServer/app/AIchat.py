@@ -113,6 +113,7 @@ def generate_exams(planName, courseName):
     # print(res)
     return json.loads(res)
 
+
 # generate_exams("学习JavaScript", "课时2. 条件语句、循环语句与函数")
 
 
@@ -289,4 +290,24 @@ def generate_outline(plan, level, studyStyle, communicationStyle, expressionStyl
     # print(json.loads(res))
     return json.loads(res)
 
+
 # generate_outline()
+
+def generate_ai_analysis(plan,test):
+    mes = "帮我分析一下我的学习情况，我的计划是"+plan+"，我的测试数据是:"+test+"简短一点，不必要分析每一个题目，部分分析即可，并给出意见，返回markdown给我"
+    massage = \
+        {
+            "messages": [
+                {"role": "user", "content": mes},
+            ],
+            "disable_search": False,
+            # "system": "" 可选参数，输入扮演的角色
+            "enable_citation": False
+        }
+    res = get_platform_response(massage)
+    # res = res.replace('json', '')
+    # res = res.replace('```', '')
+    # print(res)
+    return res
+
+# generate_ai_analysis()
