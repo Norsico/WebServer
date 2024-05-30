@@ -1,25 +1,18 @@
 import os
 
+import requests
 from flask import Flask, request, jsonify, send_from_directory, url_for
 
-from AIchat import *
 from MySQL_Tools import *
+from 讯飞Chat import *
 
 # 运用的是flask框架
 app = Flask(__name__)
 
 
-# 这里是记录git在服务器那边更新代码的指令，可以忽略，我只是记录下怕忘记
-# git fetch --all
-# git reset --hard origin/main
-
-
-# 增加接口就是这样的结构，例如下面这个就相当于我可以访问: http://172.17.156.158:6006/api/wxlogin
-# 这个172.17.156.158:6006前面的是服务器内网ip，后面的是端口号，外面访问将内网ip改成公网ip即可
 @app.route('/api/wxlogin', methods=['GET'])
-def wxlogin():  # 函数名任意
+def wxlogin():
     """
-    这个是微信小程序登录的接口，具体逻辑我也忘了，有点麻烦，先跳过这个
     它这个登录的意思大概就是，我前端首先发送请求到微信的服务器，然后微信服务器返回一个code给我，
     我再把这个code发送给我自己的服务器，然后我再根据这个code去微信服务器获取openid（这里要小程序的账户密钥之类的），
     最后我再根据openid（微信用户唯一标识）去自己的数据库里查询是否有这个用户，没有的话就注册一个，
@@ -67,7 +60,6 @@ UPLOAD_FOLDER = '/userdata/upload'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
-# 文件上传接口，这个是用户上传头像图片的接口，当时用AI写的，
 @app.route('/upload', methods=['POST'])
 def upload_file():
     if 'file' not in request.files:
